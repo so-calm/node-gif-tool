@@ -1,0 +1,18 @@
+# Folders
+/dist
+/examples
+/lib
+/node_modules
+/src
+/target
+
+# Files
+/.gitignore
+/Cargo.lock
+/Cargo.toml
+/pnpm-lock.yaml
+/README.md
+/tsconfig.json
+/webpack.config.js
+
+/**/.DS_STORE

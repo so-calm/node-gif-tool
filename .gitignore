@@ -1,0 +1,11 @@
+# Folders
+/bundle
+/dist
+/node_modules
+/target
+
+# Files
+/Cargo.lock
+/pnpm-lock.yaml
+
+/**/.DS_STORE
