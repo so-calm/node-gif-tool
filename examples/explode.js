@@ -7,8 +7,8 @@ const decoder = new GifDecoder(
   __dirname.concat("/assets/jim-carrey-silly.gif")
 );
 
-// using canvas only for example purposes. It's not the best practice, kindly decide
-// to use something else to encode image into any other format
+// using canvas only for example purposes. It's not the best practice, kindly
+// decide to use something else to encode image into any other format
 const canvas = createCanvas(decoder.width, decoder.height);
 const ctx = canvas.getContext("2d");
 

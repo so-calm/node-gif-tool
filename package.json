@@ -1,6 +1,6 @@
 {
   "name": "gif-tool",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Simple tool purposed on gif processing for nodejs",
   "main": "bundle/index.js",
   "keywords": [

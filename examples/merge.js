@@ -5,8 +5,8 @@ const { writeFileSync, readdirSync } = require("fs");
 
 const { GifEncoder } = require("../bundle");
 
-// using canvas only for example purposes. It's not the best practice, kindly decide
-// to use something else to encode image into any other format
+// using canvas only for example purposes. It's not the best practice, kindly
+// decide to use something else to encode image into any other format
 const assets = __dirname.concat("/assets/explode");
 const framePromises = readdirSync(assets).map(file => {
   return loadImage(assets.concat("/", file));
