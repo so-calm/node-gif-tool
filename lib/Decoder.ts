@@ -1,5 +1,6 @@
 import { FrameIterator } from "./Frame";
 import { lib } from "./bindings";
+import { GifDecoderError } from "./Error";
 
 export class GifDecoder {
   public width: number;
@@ -13,7 +14,7 @@ export class GifDecoder {
 
     const d = Buffer.alloc(lib.decoder_size());
     if (!lib.decoder_from_src(src, d)) {
-      throw new Error("Failed to decode image");
+      throw new GifDecoderError("Failed to decode image");
     }
 
     Object.defineProperty(this, "d", {

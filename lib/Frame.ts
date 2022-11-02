@@ -1,5 +1,6 @@
 import type { GifDecoder } from "./Decoder";
 import { lib, FrameResult } from "./bindings";
+import { GifFrameError } from "./Error";
 
 export class FrameIterator {
   constructor(public d: GifDecoder) {
@@ -9,7 +10,8 @@ export class FrameIterator {
   }
 
   public *[Symbol.iterator]() {
-    const d = Object.getOwnPropertyDescriptor(this.d, "d")!.value as lib.Decoder;
+    const d = Object.getOwnPropertyDescriptor(this.d, "d")!
+      .value as lib.Decoder;
 
     loop: while (true) {
       const f = Buffer.alloc(lib.frame_size());
@@ -24,10 +26,10 @@ export class FrameIterator {
           break loop;
 
         case FrameResult.Error:
-          throw new Error("Failed to process next frame");
+          throw new GifFrameError("Failed to process next frame");
 
         default:
-          throw new Error("Unknown FrameResult");
+          throw new GifFrameError("Unknown FrameResult");
       }
     }
   }

@@ -23,4 +23,5 @@ export namespace lib {
   export function frame_width(f: Frame): number;
   export function frame_height(f: Frame): number;
   export function set_delay(e: Encoder, delay: number): void;
+  export function encoder_finish(e: Encoder): void;
 }
