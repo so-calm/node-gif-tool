@@ -67,6 +67,11 @@ pub extern "C" fn write_frame(e: *mut Encoder, bytes: *mut u8, size: usize) -> b
 }
 
 #[no_mangle]
+pub extern "C" fn encoder_finish(e: *mut Encoder) {
+    unsafe { (*e).encoder.get_mut() }.push(0x3b)
+}
+
+#[no_mangle]
 pub extern "C" fn encoder_buffer_size(e: *mut Encoder) -> usize {
     unsafe { (*e).encoder.get_ref().len() }
 }
