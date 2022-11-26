@@ -7,7 +7,7 @@
 
 > **WARNING!** This module is maintaned by one person yet. Great maintenance is not guaranteed. There are some plans on it though
 
-This module is mainly written in **[Rust](https://rustlang.org/)** and bound to **NAPI** using **ffi-napi**\*. Image processing is implemented through **[image-rs/gif](https://github.com/image-rs/image-gif)**
+This module is mainly written in **[Rust](https://rustlang.org/)** and bound to **NAPI** using **ffi-napi**\*. Image processing is implemented through **[image-rs/gif](https://github.com/image-rs/image-gif)**. Cross-platform builds are handled via **[cross](https://github.com/cross-rs/cross)**
 
 - Easy to use
 - Declaration files included
