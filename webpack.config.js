@@ -1,5 +1,6 @@
 const NpmDtsWebpackPlugin = require("npm-dts-webpack-plugin");
 const nodeExternals = require("webpack-node-externals");
+const { basename } = require("path");
 
 /** @type {import("webpack").Configuration} */
 module.exports = {
@@ -16,5 +17,14 @@ module.exports = {
     libraryTarget: "umd",
     path: __dirname.concat("/bundle")
   },
-  externals: [nodeExternals()]
+  externals: [
+    nodeExternals(),
+    ({ request }, callback) => {
+      if (basename(request) === "package.json") {
+        return callback(null, request, "commonjs");
+      }
+
+      callback();
+    }
+  ]
 };
