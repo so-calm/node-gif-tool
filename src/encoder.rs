@@ -12,12 +12,10 @@ pub extern "C" fn encoder_size() -> usize {
 
 #[no_mangle]
 pub extern "C" fn create_encoder(w: u16, h: u16, e: *mut Encoder) -> bool {
-    let encoder = gif::Encoder::new(Vec::new(), w, h, &[]);
-    if encoder.is_err() {
+    let Ok(encoder) = gif::Encoder::new(Vec::new(), w, h, &[]) else {
         return false;
-    }
+    };
 
-    let encoder = encoder.unwrap();
     unsafe {
         *e = Encoder {
             delay: 4,
@@ -44,7 +42,7 @@ pub extern "C" fn set_repeat(e: *mut Encoder, repeat: u16) -> bool {
         return false;
     }
 
-    return true;
+    true
 }
 
 #[no_mangle]

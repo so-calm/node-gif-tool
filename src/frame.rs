@@ -11,17 +11,14 @@ pub extern "C" fn frame_size() -> usize {
 
 #[no_mangle]
 pub extern "C" fn next_frame(d: *mut gif::Decoder<std::fs::File>, f: *mut gif::Frame) -> u8 {
-    let info = unsafe { (*d).read_next_frame() };
-    if info.is_err() {
+    let Ok(info) = (unsafe { (*d).read_next_frame() }) else {
         return FrameResult::Error as u8;
-    }
+    };
 
-    let info = info.unwrap();
-    if info.is_none() {
+    let Some(info) = info else {
         return FrameResult::Empty as u8;
-    }
+    };
 
-    let info = info.unwrap();
     unsafe { *f = info.clone() }
 
     FrameResult::Ok as u8

@@ -1,12 +1,15 @@
 # Folders
+/bin
 /dist
 /examples
 /lib
 /node_modules
 /src
 /target
+/.github
 
 # Files
+/scripts/bin.js
 /.gitignore
 /Cargo.lock
 /Cargo.toml
