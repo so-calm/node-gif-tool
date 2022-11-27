@@ -1,4 +1,4 @@
-use crate::AllocFn;
+use crate::{AllocFn, decoder::GifDecoder};
 use std::{borrow::Borrow, mem::size_of, ptr};
 
 enum FrameResult {
@@ -12,7 +12,7 @@ enum FrameResult {
 // }
 
 #[no_mangle]
-pub extern "C" fn next_frame(d: *mut gif::Decoder<std::fs::File>, alloc: AllocFn<u8>) -> *const u8 {
+pub extern "C" fn next_frame(d: *mut GifDecoder, alloc: AllocFn<u8>) -> *const u8 {
     let f = alloc(size_of::<gif::Frame>() + 1);
     if f.is_null() {
         return ptr::null();
@@ -45,7 +45,7 @@ pub extern "C" fn frame_buffer(f: *mut gif::Frame, alloc: AllocFn<u8>) -> *const
     if out.is_null() {
         return ptr::null();
     }
-    unsafe { std::slice::from_raw_parts_mut(out, len) }.copy_from_slice(&buffer);
+    unsafe { std::slice::from_raw_parts_mut(out, len) }.copy_from_slice(buffer);
     out
 }
 

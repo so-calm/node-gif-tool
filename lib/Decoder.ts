@@ -7,12 +7,15 @@ export class GifDecoder {
   public height: number;
   public frames: FrameIterator;
 
-  constructor(src: string) {
-    if (typeof src !== "string") {
-      throw new TypeError("Expected 'src' to be a string");
+  constructor(src: string | Buffer) {
+    if (typeof src !== "string" && !Buffer.isBuffer(src)) {
+      throw new TypeError("Expected 'src' to be a string or Buffer instance");
     }
 
-    const d = lib.create_decoder(src, alloc);
+    const d =
+      typeof src === "string"
+        ? lib.decoder_from_file(src, alloc)
+        : lib.decoder_from_ptr(src, src.length, alloc);
     if (isNullPtr(d)) {
       throw new GifDecoderError("Failed to decode image");
     }

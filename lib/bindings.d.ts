@@ -9,7 +9,12 @@ export namespace lib {
   export type Frame = Buffer;
 
   export function create_encoder(w: number, h: number, alloc: AllocFn): Encoder;
-  export function create_decoder(src: string, alloc: AllocFn): Decoder;
+  export function decoder_from_file(src: string, alloc: AllocFn): Decoder;
+  export function decoder_from_ptr(
+    src: Buffer,
+    size: number,
+    alloc: AllocFn
+  ): Decoder;
   export function encoder_buffer(e: Encoder, alloc: AllocFn): Buffer;
   export function encoder_finish(e: Encoder): void;
   export function file_height(d: Decoder): number;

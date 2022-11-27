@@ -71,13 +71,13 @@ _It's that simple!_
 
 ### Roadmap:
 
-- [x] Cross-platform binaries
-- [ ] Compare current implementation with **[gifski](https://gif.ski/)**
-  - [ ] Migrate to **[gifski](https://gif.ski/)** if needed
-- [ ] Handle more existing image processing methods
-  - [ ] Get in use more existing options
-- [ ] Implement different image loading methods into `GifDecoder`, such as raw buffer. Currently only file path is supported
-- [ ] Built-in GIF manipulation functionality
-- [ ] Add some paragraphs to the roadmap. lol
+- ✔️ ~~Cross-platform binaries~~
+- ✔️ ~~Implement different image loading methods into `GifDecoder`, such as raw buffer~~
+- 🔜 Compare current implementation with **[gifski](https://gif.ski/)**
+  - Migrate to **[gifski](https://gif.ski/)** if needed
+- ⭕ Handle more existing image processing methods
+  - Get in use more existing options
+- ⭕ Built-in GIF manipulation functionality
+- 🔛 Add some paragraphs to the roadmap. lol
 
 > Contributions are appreciated
