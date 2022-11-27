@@ -1,10 +1,15 @@
 import type { GifDecoder } from "./Decoder";
-import { lib, FrameResult } from "./bindings";
+
+import { alloc, FrameResult, isNullPtr, lib } from "./lib";
 import { GifFrameError } from "./Error";
+
+function importDecoder() {
+  return require("./Decoder") as typeof import("./Decoder");
+}
 
 export class FrameIterator {
   constructor(public d: GifDecoder) {
-    if (!(d instanceof require("./Decoder").GifDecoder)) {
+    if (!(d instanceof importDecoder().GifDecoder)) {
       throw new TypeError("Expected decoder to be of type 'GifDecoder'");
     }
   }
@@ -12,21 +17,20 @@ export class FrameIterator {
   public *[Symbol.iterator]() {
     const d = Object.getOwnPropertyDescriptor(this.d, "d")!
       .value as lib.Decoder;
-
     loop: while (true) {
-      const f = Buffer.alloc(lib.frame_size());
-      const result = lib.next_frame(d, f);
+      const fptr = lib.next_frame(d, alloc);
+      if (isNullPtr(fptr)) {
+        throw new GifFrameError("Failed to process frame");
+      }
 
-      switch (result) {
+      const f = Buffer.from(fptr.buffer);
+      switch (f[0]) {
         case FrameResult.Ok:
-          yield new Frame(f);
+          yield new Frame(f.subarray(1));
           break;
 
         case FrameResult.Empty:
           break loop;
-
-        case FrameResult.Error:
-          throw new GifFrameError("Failed to process next frame");
 
         default:
           throw new GifFrameError("Unknown FrameResult");
@@ -59,9 +63,6 @@ export class Frame {
 
   public buffer() {
     const f = Object.getOwnPropertyDescriptor(this, "f")!.value as lib.Frame;
-    const size = lib.frame_buffer_size(f);
-    const buffer = Buffer.alloc(size);
-    lib.frame_buffer(f, buffer);
-    return buffer;
+    return lib.frame_buffer(f, alloc);
   }
 }

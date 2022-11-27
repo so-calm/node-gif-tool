@@ -21,7 +21,7 @@ module.exports = {
     nodeExternals(),
     ({ request }, callback) => {
       if (basename(request) === "package.json") {
-        return callback(null, request, "commonjs");
+        return callback(null, "../package.json", "commonjs");
       }
 
       callback();

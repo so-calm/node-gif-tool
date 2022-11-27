@@ -1,13 +1,14 @@
 {
   "name": "gif-tool",
-  "version": "0.1.5",
+  "version": "0.1.6-rc1",
   "description": "Simple tool purposed on gif processing for nodejs",
   "main": "bundle/index.js",
   "types": "bundle/index.d.ts",
   "author": "zargovv <max@zargovv.ru>",
   "license": "MIT",
   "scripts": {
-    "install": "node scripts/install"
+    "install": "node scripts/install",
+    "build": "make && webpack"
   },
   "keywords": [
     "image",
@@ -19,7 +20,8 @@
     "deserialize",
     "frame",
     "serialize",
-    "animation"
+    "animation",
+    "tool"
   ],
   "repository": {
     "type": "git",
@@ -30,12 +32,10 @@
   },
   "homepage": "https://github.com/so-calm/node-gif-tool",
   "dependencies": {
-    "ffi-napi": "4.0.3",
-    "ref-napi": "3.0.3"
+    "ffi-napi": "4.0.3"
   },
   "devDependencies": {
     "@types/ffi-napi": "4.0.6",
-    "@types/ref-napi": "3.0.5",
     "npm-dts-webpack-plugin": "1.3.12",
     "ts-loader": "9.4.1",
     "typescript": "4.8.4",

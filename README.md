@@ -71,6 +71,7 @@ _It's that simple!_
 
 ### Roadmap:
 
+- [x] Cross-platform binaries
 - [ ] Compare current implementation with **[gifski](https://gif.ski/)**
   - [ ] Migrate to **[gifski](https://gif.ski/)** if needed
 - [ ] Handle more existing image processing methods

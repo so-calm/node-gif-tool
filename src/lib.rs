@@ -13,3 +13,5 @@ pub extern "C" fn file_width(d: *mut gif::Decoder<std::fs::File>) -> u16 {
 pub extern "C" fn file_height(d: *mut gif::Decoder<std::fs::File>) -> u16 {
     unsafe { (*d).height() }
 }
+
+pub type AllocFn<T> = extern "C" fn(usize) -> *mut T;

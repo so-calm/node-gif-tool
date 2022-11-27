@@ -1,7 +1,9 @@
-import { lib } from "./bindings";
 import { GifEncoderError } from "./Error";
+import { alloc, isNullPtr, lib } from "./lib";
 
-export const Repeat = { Infinite: 0 };
+export enum Repeat {
+  Infinite = 0
+}
 
 export class GifEncoder {
   public width: number;
@@ -17,8 +19,8 @@ export class GifEncoder {
       throw new TypeError("Expected width to be an unsigned 16-bit integer");
     }
 
-    const e = Buffer.alloc(lib.encoder_size());
-    if (!lib.create_encoder(w, h, e)) {
+    const e = lib.create_encoder(w, h, alloc);
+    if (isNullPtr(e)) {
       throw new GifEncoderError("Failed to init encoder");
     }
 
@@ -34,6 +36,10 @@ export class GifEncoder {
   }
 
   public setRepeat(repeat: number) {
+    if (typeof repeat !== "number" || repeat < 0) {
+      throw new TypeError("Expected 'repeat' to be an unsigned integer");
+    }
+
     if (this.end) throw new GifEncoderError("GifEncoder.setRepeat call on EOS");
 
     const e = Object.getOwnPropertyDescriptor(this, "e")!.value as lib.Encoder;
@@ -63,10 +69,12 @@ export class GifEncoder {
       this.end = true;
     }
 
-    const size = lib.encoder_buffer_size(e);
-    const buffer = Buffer.alloc(size);
-    lib.encoder_buffer(e, buffer);
-    return buffer;
+    const b = lib.encoder_buffer(e, alloc);
+    if (isNullPtr(b)) {
+      throw new GifEncoderError("Failed to allocate buffer memory");
+    }
+
+    return b;
   }
 
   public setDelay(delay: number) {

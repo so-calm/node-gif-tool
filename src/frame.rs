@@ -1,27 +1,35 @@
+use crate::AllocFn;
+use std::{borrow::Borrow, mem::size_of, ptr};
+
 enum FrameResult {
     Ok = 0,
     Empty = 1,
-    Error = 2,
 }
 
-#[no_mangle]
-pub extern "C" fn frame_size() -> usize {
-    std::mem::size_of::<gif::Frame>()
-}
+// #[no_mangle]
+// pub extern "C" fn frame_size() -> usize {
+//     std::mem::size_of::<gif::Frame>()
+// }
 
 #[no_mangle]
-pub extern "C" fn next_frame(d: *mut gif::Decoder<std::fs::File>, f: *mut gif::Frame) -> u8 {
-    let Ok(info) = (unsafe { (*d).read_next_frame() }) else {
-        return FrameResult::Error as u8;
-    };
+pub extern "C" fn next_frame(d: *mut gif::Decoder<std::fs::File>, alloc: AllocFn<u8>) -> *const u8 {
+    let f = alloc(size_of::<gif::Frame>() + 1);
+    if f.is_null() {
+        return ptr::null();
+    }
 
-    let Some(info) = info else {
-        return FrameResult::Empty as u8;
-    };
+    let Ok(info) = (unsafe { (*d).read_next_frame() }) else { return ptr::null() };
 
-    unsafe { *f = info.clone() }
+    if let Some(info) = info {
+        unsafe {
+            *f = FrameResult::Ok as u8;
+            *((f as *mut gif::Frame).add(1)) = info.clone()
+        }
+    } else {
+        unsafe { *f = FrameResult::Empty as u8 }
+    }
 
-    FrameResult::Ok as u8
+    f
 }
 
 #[no_mangle]
@@ -30,15 +38,15 @@ pub extern "C" fn frame_delay(f: *mut gif::Frame) -> u16 {
 }
 
 #[no_mangle]
-pub extern "C" fn frame_buffer_size(f: *mut gif::Frame) -> usize {
-    unsafe { (*f).buffer.len() }
-}
-
-#[no_mangle]
-pub extern "C" fn frame_buffer(f: *mut gif::Frame, out: *mut u8) {
-    for (i, b) in unsafe { (*f).buffer.iter() }.enumerate() {
-        unsafe { *out.add(i) = *b }
+pub extern "C" fn frame_buffer(f: *mut gif::Frame, alloc: AllocFn<u8>) -> *const u8 {
+    let buffer: &[u8] = unsafe { (*f).buffer.borrow() };
+    let len = buffer.len();
+    let out = alloc(len);
+    if out.is_null() {
+        return ptr::null();
     }
+    unsafe { std::slice::from_raw_parts_mut(out, len) }.copy_from_slice(&buffer);
+    out
 }
 
 #[no_mangle]

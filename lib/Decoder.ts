@@ -1,6 +1,6 @@
 import { FrameIterator } from "./Frame";
-import { lib } from "./bindings";
 import { GifDecoderError } from "./Error";
+import { alloc, isNullPtr, lib } from "./lib";
 
 export class GifDecoder {
   public width: number;
@@ -12,8 +12,8 @@ export class GifDecoder {
       throw new TypeError("Expected 'src' to be a string");
     }
 
-    const d = Buffer.alloc(lib.decoder_size());
-    if (!lib.decoder_from_src(src, d)) {
+    const d = lib.create_decoder(src, alloc);
+    if (isNullPtr(d)) {
       throw new GifDecoderError("Failed to decode image");
     }
 
